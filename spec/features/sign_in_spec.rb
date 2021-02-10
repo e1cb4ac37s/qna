@@ -9,6 +9,19 @@ feature 'User can sign in', %q{
 
   background { visit new_user_session_path }
 
+  scenario 'Authenticated user can not sign in' do
+    sign_in(user)
+    visit root_path
+
+    expect(page).not_to have_content 'Sign in'
+  end
+
+  scenario 'Unauthenticated user can sign in' do
+    visit root_path
+
+    expect(page).to have_content 'Sign in'
+  end
+
   scenario 'Registered user tries to sign in' do
     fill_in 'Email', with: user.email
     fill_in 'Password', with: user.password
