@@ -6,7 +6,10 @@ class QuestionsController < ApplicationController
     @questions = Question.all
   end
 
-  def show; end
+  def show
+    @answers = question.answers
+    @new_answer = question.answers.new
+  end
 
   def new; end
 

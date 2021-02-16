@@ -1,2 +1,16 @@
+= render 'shared/errors', resource: question
+
 h1= question.title
 p= question.body
+
+.answers
+  - @answers.each do |answer|
+    .answer
+      p= answer.body
+
+- if user_signed_in?
+
+  = form_with model: @new_answer, url: question_answers_path(question.id), class: 'new-answer' do |f|
+    = f.label :body
+    = f.text_area :body
+    = f.submit 'Send Answer'
