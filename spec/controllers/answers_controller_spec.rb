@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let!(:question) { create(:question) }
   let(:user) { create(:user) }
+  let!(:question) { create(:question, user_id: user.id) }
 
   describe 'GET #show' do
-    let(:answer) { question.answers.create(body: 'MyText') }
+    let(:answer) { question.answers.create(body: 'MyText', user_id: user.id) }
     before { get :show, params: { question_id: question, id: answer } }
 
     it 'renders show view' do

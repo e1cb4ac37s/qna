@@ -4,7 +4,7 @@ class AnswersController < ApplicationController
 
   def create
     @question = Question.find(params[:question_id])
-    @answer = @question.answers.new(answer_params)
+    @answer = current_user.answers.new(answer_params.merge(question_id: @question.id))
     if @answer.save
       redirect_to @question, notice: 'Your answer successfully created.'
     else
