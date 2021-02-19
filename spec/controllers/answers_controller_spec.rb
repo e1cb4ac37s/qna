@@ -26,7 +26,7 @@ RSpec.describe AnswersController, type: :controller do
           expect { post :create, params: @params }.to change(Answer, :count).by(1)
         end
 
-        it 'redirects to show view' do
+        it 'redirects to question#show view' do
           post :create, params: @params
           expect(response).to redirect_to question
         end
@@ -48,6 +48,32 @@ RSpec.describe AnswersController, type: :controller do
       it 'does not save a new answer in the database' do
         @params = { question_id: question.id, answer: { body: 'MyText' } }
         expect { post :create, params: @params }.not_to change(Answer, :count)
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    before { login(user) }
+
+    describe 'Owner of the answer' do
+      let!(:answer) { create(:answer, user_id: user.id, question_id: question.id) }
+
+      it 'deletes the answer' do
+        expect { delete :destroy, params: { id: answer, question_id: question } }.to change(Answer, :count).by(-1)
+      end
+
+      it 'redirects to question#show' do
+        delete :destroy, params: { id: answer, question_id: question }
+        expect(response).to redirect_to question
+      end
+    end
+
+    describe 'Not owner of the answer' do
+      let(:another_user) { create(:user) }
+      let!(:answer) { create(:answer, user_id: another_user.id, question_id: question.id) }
+
+      it 'can not delete the answer' do
+        expect { delete :destroy, params: { id: answer, question_id: question } }.not_to change(Answer, :count)
       end
     end
   end

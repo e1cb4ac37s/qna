@@ -14,6 +14,14 @@ class AnswersController < ApplicationController
 
   def edit; end
 
+  def destroy
+    @answer = Answer.find(params[:id])
+    if @answer.user == current_user
+      @answer.destroy
+      redirect_to @answer.question
+    end
+  end
+
   private
 
   def answer_params
