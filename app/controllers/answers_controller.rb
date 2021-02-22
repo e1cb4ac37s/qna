@@ -8,7 +8,7 @@ class AnswersController < ApplicationController
     if @answer.save
       redirect_to @question, notice: 'Your answer successfully created.'
     else
-      render :edit
+      redirect_to @question, notice: 'Answer is invalid, try again'
     end
   end
 
@@ -16,7 +16,7 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer = Answer.find(params[:id])
-    if @answer.user == current_user
+    if current_user.owns?(@answer)
       @answer.destroy
       redirect_to @answer.question, notice: 'Your answer successfully deleted.'
     end

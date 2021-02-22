@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
   let(:user) { create(:user) }
-  let(:question) { create(:question, user_id: user.id) }
+  let(:question) { create(:question, user: user) }
 
   describe 'GET #index' do
-    let(:questions) { 3.times.map { create(:question, user_id: user.id) } }
+    let(:questions) { create_list(:question, 3, user: user) }
 
     before { get :index }
 

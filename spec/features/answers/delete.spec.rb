@@ -6,7 +6,7 @@ feature 'User can delete answer', %q{
 } do
   given(:user) { create(:user) }
   given(:question) { create(:question, user_id: user.id) }
-  given!(:answer) { create(:answer, user_id: user.id, question: question) }
+  given!(:answer) { create(:answer, user_id: user.id, question: question, body: 'answer body') }
 
   describe 'Authenticated user' do
     scenario 'deletes her answer' do
@@ -15,6 +15,7 @@ feature 'User can delete answer', %q{
       click_on class: 'answer__delete'
 
       expect(page).to have_content 'Your answer successfully deleted.'
+      expect(page).not_to have_content answer.body
     end
 
     scenario "can not delete another user's answer" do
