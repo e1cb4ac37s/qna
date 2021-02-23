@@ -1,19 +1,26 @@
 class AnswersController < ApplicationController
+  before_action :authenticate_user!, except: [:show]
   def show; end
 
-  def new; end
-
   def create
-    @question = Question.find(params[:question_id])
-    @answer = @question.answers.new(answer_params)
-    if @answer.save
-      redirect_to question_answer_path(@question, @answer)
+    question = Question.find(params[:question_id])
+    @new_answer = current_user.answers.new(answer_params.merge(question_id: question.id))
+    if @new_answer.save
+      redirect_to question, notice: 'Your answer successfully created.'
     else
-      render :edit
+      render "questions/show", locals: { question: question }
     end
   end
 
   def edit; end
+
+  def destroy
+    @answer = Answer.find(params[:id])
+    if current_user.author_of?(@answer)
+      @answer.destroy
+      redirect_to @answer.question, notice: 'Your answer successfully deleted.'
+    end
+  end
 
   private
 
