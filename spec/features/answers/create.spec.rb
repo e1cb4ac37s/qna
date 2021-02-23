@@ -32,7 +32,7 @@ feature 'User can create answer', %q{
       fill_in 'Body', with: '   '
       click_on 'Send Answer'
 
-      expect(page).to have_content 'Answer is invalid, try again'
+      expect(page).to have_content "Body can't be blank"
       expect(page).to have_content question.title
       expect(page).to have_content question.body
       expect(page).not_to have_css '.answer'

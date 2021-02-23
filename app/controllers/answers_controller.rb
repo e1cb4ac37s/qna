@@ -3,12 +3,12 @@ class AnswersController < ApplicationController
   def show; end
 
   def create
-    @question = Question.find(params[:question_id])
-    @answer = current_user.answers.new(answer_params.merge(question_id: @question.id))
-    if @answer.save
-      redirect_to @question, notice: 'Your answer successfully created.'
+    question = Question.find(params[:question_id])
+    @new_answer = current_user.answers.new(answer_params.merge(question_id: question.id))
+    if @new_answer.save
+      redirect_to question, notice: 'Your answer successfully created.'
     else
-      redirect_to @question, notice: 'Answer is invalid, try again'
+      render "questions/show", locals: { question: question }
     end
   end
 
@@ -16,7 +16,7 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer = Answer.find(params[:id])
-    if current_user.owns?(@answer)
+    if current_user.author_of?(@answer)
       @answer.destroy
       redirect_to @answer.question, notice: 'Your answer successfully deleted.'
     end

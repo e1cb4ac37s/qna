@@ -1,18 +1,17 @@
-= render 'shared/errors', resource: question
+= render 'shared/errors', resource: @new_answer
 
 h1= question.title
 p= question.body
 
-- if current_user&.owns?(question)
-  =link_to 'Delete Question', question, class: 'question__delete', method: :delete
+- if current_user&.author_of?(question)
+  = link_to 'Delete Question', question, class: 'question__delete', method: :delete
 
 .answers
-  - if question.answers.length > 1
-    - question.answers.each do |answer|
-      .answer
-        p= answer.body
-        - if current_user&.owns?(answer)
-          =link_to 'Delete Answer', answer, class: 'answer__delete', method: :delete
+  - question.answers.each do |answer|
+    .answer
+      p= answer.body
+      - if current_user&.author_of?(answer)
+        = link_to 'Delete Answer', answer, class: 'answer__delete', method: :delete
 
 - if user_signed_in?
   h3= 'Enter your answer:'

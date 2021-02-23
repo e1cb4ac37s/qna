@@ -7,8 +7,7 @@ class User < ApplicationRecord
   has_many :questions
   has_many :answers
 
-  def owns?(entity)
-    return entity.user.id == id if entity&.user
-    false
+  def author_of?(entity)
+    entity&.user_id == id
   end
 end

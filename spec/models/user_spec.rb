@@ -4,20 +4,22 @@ RSpec.describe User, type: :model do
   it { should have_many(:answers) }
   it { should have_many(:questions) }
 
-  describe 'owns? method' do
+  describe '#author_of?' do
     subject { create(:user) }
-    it 'should return true if entity is created by tested user' do
+    let(:another_user) { create(:user) }
+    let(:question_of_another_user) { another_user.questions.create(attributes_for(:question)) }
+
+    it 'returns true if entity is created by tested user' do
       question = subject.questions.create(attributes_for(:question))
-      expect(subject.owns?(question)).to be true
+      expect(subject).to be_author_of(question)
     end
-    it 'should return false if entity is created by user, other than tested one' do
-      another_user = create(:user)
-      question = another_user.questions.create(attributes_for(:question))
-      expect(subject.owns?(question)).to be false
-      expect(another_user.owns?(question)).to be true
+
+    it 'returns false if entity is created by another user' do
+      expect(subject).not_to be_author_of(question_of_another_user)
     end
+
     it 'should return false if no entity passed' do
-      expect(subject.owns?(nil)).to be false
+      expect(subject).not_to be_author_of(nil)
     end
   end
 end

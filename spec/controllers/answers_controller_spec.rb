@@ -37,9 +37,9 @@ RSpec.describe AnswersController, type: :controller do
           expect { post :create, params: params }.to_not change(Answer, :count)
         end
 
-        it 're-renders edit view' do
+        it 're-renders questions/show with errors' do
           post :create, params: params
-          expect(response).to redirect_to question
+          expect(response).to render_template "questions/show"
         end
       end
     end

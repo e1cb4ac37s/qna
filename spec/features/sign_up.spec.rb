@@ -24,6 +24,7 @@ feature 'User can sign in', %q{
       fill_in 'Password', with: 'password'
       fill_in 'Password confirmation', with: 'password'
     end
+
     scenario 'with new email' do
       fill_in 'Email', with: 'johndoe@example.com'
       click_on 'Sign up'
