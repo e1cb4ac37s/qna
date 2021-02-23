@@ -7,10 +7,10 @@ RSpec.describe User, type: :model do
   describe '#author_of?' do
     subject { create(:user) }
     let(:another_user) { create(:user) }
+    let(:question) { subject.questions.create(attributes_for(:question)) }
     let(:question_of_another_user) { another_user.questions.create(attributes_for(:question)) }
 
     it 'returns true if entity is created by tested user' do
-      question = subject.questions.create(attributes_for(:question))
       expect(subject).to be_author_of(question)
     end
 
