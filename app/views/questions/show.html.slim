@@ -1,5 +1,3 @@
-= render 'shared/errors', resource: @new_answer
-
 h1= question.title
 p= question.body
 
@@ -7,15 +5,15 @@ p= question.body
   = link_to 'Delete Question', question, class: 'question__delete', method: :delete
 
 .answers
-  - question.answers.each do |answer|
-    .answer
-      p= answer.body
-      - if current_user&.author_of?(answer)
-        = link_to 'Delete Answer', answer, class: 'answer__delete', method: :delete
+  = render question.answers
+
+.answer-errors
 
 - if user_signed_in?
   h3= 'Enter your answer:'
-  = form_with model: @new_answer, url: question_answers_path(question.id), class: 'new-answer' do |f|
-    = f.label :body
-    = f.text_area :body
-    = f.submit 'Send Answer'
+  = form_with model: [question, @answer], class: 'new-answer' do |f|
+    p
+      = f.label :body
+      = f.text_area :body
+    p
+      = f.submit 'Send Answer'
