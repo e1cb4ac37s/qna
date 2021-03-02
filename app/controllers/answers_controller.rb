@@ -5,6 +5,12 @@ class AnswersController < ApplicationController
     @answer = current_user.answers.create(answer_params.merge(question_id: question.id))
   end
 
+  def update
+    @answer = Answer.find(params[:id])
+    @answer.update(answer_params)
+    @question = @answer.question
+  end
+
   def destroy
     @answer = Answer.find(params[:id])
     if current_user.author_of?(@answer)
