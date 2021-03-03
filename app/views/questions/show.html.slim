@@ -1,15 +1,11 @@
-h1= question.title
-p= question.body
-
-- if current_user&.author_of?(question)
-  = link_to 'Delete Question', question, class: 'question__delete', method: :delete
+.question-wrapper
+  = render question
 
 .answers
   = render question.answers
 
-.answer-errors
-
 - if user_signed_in?
+  .answer-errors
   h3= 'Enter your answer:'
   = form_with model: [question, @answer], class: 'new-answer' do |f|
     p

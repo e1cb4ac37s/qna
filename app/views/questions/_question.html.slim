@@ -1,0 +1,10 @@
+.question
+  h1= question.title
+  p= question.body
+
+  - if current_user&.author_of?(question)
+    .question__actions
+      = link_to 'Edit', '#', class: 'question__edit'
+      = link_to 'Delete Question', question, class: 'question__delete', method: :delete
+    .question-errors
+    = render 'form', question: question, edit: true
