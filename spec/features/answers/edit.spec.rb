@@ -19,9 +19,8 @@ feature 'User can edit his answer', %q{
       sign_in user
       visit question_path(question)
 
-      click_on 'Edit'
-
       within '.answers' do
+        click_on 'Edit'
         fill_in 'Your answer', with: 'lorem ipsum'
         click_on 'Save'
 

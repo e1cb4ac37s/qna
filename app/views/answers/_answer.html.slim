@@ -1,8 +1,8 @@
-.answer
+.answer id="answer-#{answer.id}"
   p= answer.body
   - if current_user&.author_of?(answer)
     = link_to 'Edit', '#', class: 'answer__edit', data: { answer_id: answer.id }
-    = link_to 'Delete Answer', answer, class: 'answer__delete', method: :delete
+    = link_to 'Delete', answer, class: 'answer__delete', method: :delete, remote: true
 
     = form_with model: answer, class: 'hidden', html: { id: "answer-edit-form-#{answer.id}" } do |f|
       = f.label :body, 'Your answer'
