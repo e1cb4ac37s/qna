@@ -15,23 +15,44 @@ feature 'User can edit his answer', %q{
   end
 
   describe 'Authenticated user' do
-    scenario 'edits his answer', js: true do
-      sign_in user
-      visit question_path(question)
+    describe 'edits his answer', js: true do
+      before do
+        sign_in user
+        visit question_path(question)
+      end
 
-      within '.answers' do
-        click_on 'Edit'
-        fill_in 'Your answer', with: 'lorem ipsum'
-        click_on 'Save'
+      scenario 'without errors' do
+        within '.answers' do
+          click_on 'Edit'
+          fill_in 'Your answer', with: 'lorem ipsum'
+          click_on 'Save'
 
-        expect(page).not_to have_content answer.body
-        expect(page).to have_content 'lorem ipsum'
-        expect(page).not_to have_selector 'textarea'
+          expect(page).not_to have_content answer.body
+          expect(page).to have_content 'lorem ipsum'
+          expect(page).not_to have_selector 'textarea'
+        end
+      end
+
+      scenario 'with errors' do
+        within '.answers' do
+          click_on 'Edit'
+          fill_in 'Your answer', with: ''
+          click_on 'Save'
+
+          expect(page).to have_content "Body can't be blank"
+          expect(page).to have_content answer.body
+          expect(page).to have_selector 'textarea'
+        end
       end
     end
 
-    scenario 'edits his answer with errors'
+    scenario "can not edit other user's answer" do
+      sign_in create(:user)
+      visit question_path(question)
 
-    scenario "tries to edit other user's answer"
+      within '.answers' do
+        expect(page).not_to have_link 'Edit'
+      end
+    end
   end
 end

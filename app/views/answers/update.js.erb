@@ -1,5 +1,5 @@
 (() => {
-  const answerErrors = document.querySelector('.answer-errors')
+  const answerErrors = document.querySelector('.answers .answer__errors')
   answerErrors.innerHTML = '<%= render 'shared/errors', resource: @answer %>'
 
   <% unless @answer.errors.present? %>
