@@ -1,5 +1,8 @@
 (() => {
-  <% if @answer.nil? %>
+  <% if @answer == @prev_best_answer %>
+    const prevBestAnswer = document.querySelectorAll('.answer#answer-<%= @prev_best_answer.id%>')
+    prevBestAnswer[1].classList.remove('hidden')
+    prevBestAnswer[0].remove()
   <% else %>
     const nextBestAnswerContent = '<%= j render(@answer, is_best: true) %>'
     const nextBestAnswer = document.querySelector('.answer#answer-<%= @answer.id%>')

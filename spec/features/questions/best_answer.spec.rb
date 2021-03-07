@@ -50,6 +50,14 @@ feature 'User can select best answer for asked question', %q{
           end
         end
 
+        scenario 'unchecks best answer' do
+          expect(page).to have_content '[Best Answer]'
+          within "#answer-#{answer2.id}" do
+            click_on 'Best!'
+          end
+          expect(page).not_to have_content '[Best Answer]'
+        end
+
         scenario 'deletes best answer' do
           within "#answer-#{answer2.id}" do
             click_on 'Delete'

@@ -40,7 +40,7 @@ class QuestionsController < ApplicationController
     @question = Question.find(params[:id])
     @prev_best_answer = @question.best_answer
     if @question.id == @answer.question_id
-      @question.set_best_answer(@answer)
+      @question.set_best_answer(@answer == @prev_best_answer ? nil : @answer)
     end
   end
 
