@@ -1,9 +1,10 @@
 (() => {
-  const answerErrors = document.querySelector('.answers .answer__errors')
-  answerErrors.innerHTML = '<%= render 'shared/errors', resource: @answer %>'
-
-  <% unless @answer.errors.present? %>
-    const answers = document.querySelector('.answers')
-    answers.innerHTML = '<%= j render @question.answers %>'
+  const answerNodes = document.querySelectorAll('#answer-<%= @answer.id %>')
+  <% if @answer.errors.present? %>
+    const answerErrors = answerNode.querySelector('.answer#answer-<%= @answer.id %> .answer__errors')
+    answerErrors.innerHTML = '<%= render 'shared/errors', resource: @answer %>'
+  <% else %>
+    answerNodes[0].outerHTML = '<%= j render @answer, is_best: @answer.best_answer_of?(question) %>'
+    if (answerNodes[1]) answerNodes[1].outerHTML = '<%= j render @answer %>'
   <% end %>
 })()

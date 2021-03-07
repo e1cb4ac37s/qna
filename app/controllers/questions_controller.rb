@@ -35,6 +35,15 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def set_best_answer
+    @answer = Answer.find(params[:answer_id])
+    @question = Question.find(params[:id])
+    @prev_best_answer = @question.best_answer
+    if @question.id == @answer.question_id
+      @question.set_best_answer(@answer)
+    end
+  end
+
   private
 
   def question

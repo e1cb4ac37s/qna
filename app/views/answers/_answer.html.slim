@@ -1,9 +1,24 @@
-.answer id="answer-#{answer.id}"
+ruby:
+  is_best = false if local_assigns[:is_best].nil?
+  class_to_hide_best = answer.best_answer_of?(question) && !is_best ? 'hidden' : ''
+  class_to_mark_best = is_best ? 'answer--best' : ''
+
+.answer class=([class_to_hide_best, class_to_mark_best]) id="answer-#{answer.id}"
+  - if is_best
+    h3.answer__best-label
+      | [Best Answer]
   p= answer.body
-  - if current_user&.author_of?(answer)
-    = link_to 'Edit', '#', class: 'answer__edit', data: { answer_id: answer.id }
-    = link_to 'Delete', answer, class: 'answer__delete', method: :delete, remote: true
+
+  .answer__actions
+    - if current_user&.author_of?(answer.question)
+      = link_to 'Best!', set_best_answer_question_path(answer.question, answer), class: is_best ? 'strike' : '', method: :patch, remote: true
+
+    - if current_user&.author_of?(answer)
+      = link_to 'Edit', '#', class: 'answer__edit', data: { answer_id: answer.id }
+      = link_to 'Delete', answer, class: 'answer__delete', method: :delete, remote: true
+
     .answer__errors
+
     = form_with model: answer, class: 'hidden', html: { id: "answer-edit-form-#{answer.id}" } do |f|
       = f.label :body, 'Your answer'
       = f.text_area :body

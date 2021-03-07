@@ -135,4 +135,21 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #set_best_answer' do
+    let(:answer) { create(:answer, user: user, question: question) }
+    before do
+      login(user)
+      patch :set_best_answer, params: { id: question, answer_id: answer.id }, format: :js
+      question.reload
+    end
+
+    it 'links best_answer to question' do
+      expect(question.best_answer).to eq(answer)
+    end
+
+    it 'renders set_best_answer' do
+      expect(response).to render_template 'questions/set_best_answer'
+    end
+  end
 end
