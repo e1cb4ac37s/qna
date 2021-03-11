@@ -1,0 +1,20 @@
+(() => {
+  <% if @answer == @prev_best_answer %>
+    const prevBestAnswer = document.querySelectorAll('.answer#answer-<%= @prev_best_answer.id%>')
+    prevBestAnswer[1].classList.remove('hidden')
+    prevBestAnswer[0].remove()
+  <% else %>
+    const nextBestAnswerContent = '<%= j render(@answer, is_best: true) %>'
+    const nextBestAnswer = document.querySelector('.answer#answer-<%= @answer.id%>')
+    <% unless @prev_best_answer.nil? %>
+      const prevBestAnswer = document.querySelectorAll('.answer#answer-<%= @prev_best_answer.id%>')
+      prevBestAnswer[0].outerHTML = nextBestAnswerContent
+      prevBestAnswer[1].classList.remove('hidden')
+    <% else %>
+      const nextBestAnswerNode = document.createElement('div')
+      document.querySelector('.answers').prepend(nextBestAnswerNode)
+      nextBestAnswerNode.outerHTML = nextBestAnswerContent
+    <% end %>
+    nextBestAnswer.classList.add('hidden')
+  <% end %>
+})()

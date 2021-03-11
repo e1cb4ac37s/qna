@@ -1,0 +1,10 @@
+(() => {
+  <% if question.errors.present? %>
+    document
+      .querySelector('.question-errors')
+      .innerHTML = '<%= render 'shared/errors', resource: question %>'
+  <% else %>
+    const questionWrapper = document.querySelector('.question-wrapper')
+    questionWrapper.innerHTML = '<%= j render 'question', question: question %>'
+  <% end %>
+})()

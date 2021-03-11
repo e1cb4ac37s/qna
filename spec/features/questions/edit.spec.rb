@@ -1,0 +1,68 @@
+require 'rails_helper'
+
+feature 'User can create question', %q{
+  In order to correct mistakes in my question
+  As an authenticated user
+  I'd like to be able to edit the question
+} do
+  given(:user) { create(:user) }
+  given(:question) { create(:question, user: user) }
+
+  describe 'Authenticated user' do
+    background do
+      sign_in(user)
+      visit question_path(question)
+      within '.question__actions' do
+        click_on 'Edit'
+      end
+    end
+
+    scenario 'edits the question title', js: true do
+      within '.question' do
+        expect(page).to have_selector 'input'
+      end
+
+      new_title = 'New question title'
+      fill_in 'Title', with: new_title
+
+      click_on 'Save'
+
+      expect(page).to have_content new_title
+    end
+
+    scenario 'edits the question body', js: true do
+      within '.question' do
+        expect(page).to have_selector 'textarea'
+
+        new_body = 'New question body'
+        fill_in 'Body', with: new_body
+        click_on 'Save'
+
+        expect(page).to have_content new_body
+      end
+    end
+
+    scenario 'edits the question with errors', js: true do
+      within '.question' do
+        fill_in 'Body', with: ''
+        click_on 'Save'
+
+        expect(page).to have_content "Body can't be blank"
+        expect(page).to have_content question.body
+      end
+    end
+  end
+
+  scenario 'Unauthenticated user can not edit question' do
+    visit question_path(question)
+
+    expect(page).not_to have_selector '.question__actions'
+  end
+
+  scenario "Authenticated user can not edit other user's question" do
+    sign_in(create(:user))
+    visit question_path(question)
+
+    expect(page).not_to have_selector '.question__actions'
+  end
+end

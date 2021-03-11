@@ -4,15 +4,6 @@ RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user) }
   let!(:question) { create(:question, user: user) }
 
-  describe 'GET #show' do
-    let(:answer) { question.answers.create(body: 'MyText', user: user) }
-    before { get :show, params: { id: answer } }
-
-    it 'renders show view' do
-      expect(response).to render_template :show
-    end
-  end
-
   describe 'POST #create' do
     describe 'by authenticated user' do
       before { login(user) }
@@ -21,12 +12,12 @@ RSpec.describe AnswersController, type: :controller do
         let(:params) { { question_id: question.id, answer: { body: 'MyText' } } }
 
         it 'saves a new answer in the database' do
-          expect { post :create, params: params }.to change(question.answers, :count).by(1)
+          expect { post :create, params: params, format: :js }.to change(question.answers, :count).by(1)
         end
 
-        it 'redirects to question#show view' do
-          post :create, params: params
-          expect(response).to redirect_to question
+        it 'renders create' do
+          post :create, params: params, format: :js
+          expect(response).to render_template :create
         end
       end
 
@@ -34,12 +25,12 @@ RSpec.describe AnswersController, type: :controller do
         let(:params) { { question_id: question.id, answer: { body: nil } } }
 
         it 'does not save the answer' do
-          expect { post :create, params: params }.to_not change(Answer, :count)
+          expect { post :create, params: params, format: :js }.to_not change(Answer, :count)
         end
 
-        it 're-renders questions/show with errors' do
-          post :create, params: params
-          expect(response).to render_template "questions/show"
+        it 'renders create' do
+          post :create, params: params, format: :js
+          expect(response).to render_template :create
         end
       end
     end
@@ -52,6 +43,40 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
+  describe 'PATCH #update' do
+    let!(:answer) { create(:answer, user: user)}
+
+    context 'with valid attributes' do
+      before do
+        login(user)
+        patch :update, params: { id: answer, answer: { body: 'changed body' } }, format: :js
+        answer.reload
+      end
+
+      it 'changes answer attributes' do
+        expect(answer.body).to eq 'changed body'
+      end
+
+      it 'renders update view' do
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'with invalid attributes' do
+      before { login(user) }
+      let(:params) { { id: answer, answer: attributes_for(:answer, :invalid) } }
+
+      it 'does not change answer attributes' do
+        expect { patch :update, params: params, format: :js }.not_to change(answer, :body)
+      end
+
+      it 'renders update view' do
+        patch :update, params: params, format: :js
+        expect(response).to render_template :update
+      end
+    end
+  end
+
   describe 'DELETE #destroy' do
     before { login(user) }
 
@@ -60,12 +85,12 @@ RSpec.describe AnswersController, type: :controller do
       let(:params) { { id: answer, question_id: question } }
 
       it 'deletes the answer' do
-        expect { delete :destroy, params: params }.to change(Answer, :count).by(-1)
+        expect { delete :destroy, params: params, format: :js }.to change(Answer, :count).by(-1)
       end
 
-      it 'redirects to question#show' do
-        delete :destroy, params: params
-        expect(response).to redirect_to question
+      it 'renders destroy' do
+        delete :destroy, params: params, format: :js
+        expect(response).to render_template :destroy
       end
     end
 
@@ -74,7 +99,7 @@ RSpec.describe AnswersController, type: :controller do
       let!(:answer) { create(:answer, user: another_user, question: question) }
 
       it 'can not delete the answer' do
-        expect { delete :destroy, params: { id: answer, question_id: question } }.not_to change(Answer, :count)
+        expect { delete :destroy, params: { id: answer, question_id: question }, format: :js }.not_to change(Answer, :count)
       end
     end
   end

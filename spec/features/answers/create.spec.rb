@@ -7,7 +7,7 @@ feature 'User can create answer', %q{
   given(:user) { create(:user) }
   given!(:question) { create(:question, user: user) }
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     before do
       sign_in(user)
       visit question_path(question.id)
@@ -21,11 +21,12 @@ feature 'User can create answer', %q{
       fill_in 'Body', with: 'lorem ipsum'
       click_on 'Send Answer'
 
-      expect(page).to have_content 'Your answer successfully created.'
       expect(page).to have_content question.title
       expect(page).to have_content question.body
-      expect(page).to have_content 'lorem ipsum'
-      expect(page).to have_css '.answer'
+      within '.answers' do
+        expect(page).to have_content 'lorem ipsum'
+        expect(page).to have_css '.answer'
+      end
     end
 
     scenario 'gives invalid answer to the question' do

@@ -1,21 +1,17 @@
-= render 'shared/errors', resource: @new_answer
-
-h1= question.title
-p= question.body
-
-- if current_user&.author_of?(question)
-  = link_to 'Delete Question', question, class: 'question__delete', method: :delete
+.question-wrapper
+  = render question
 
 .answers
-  - question.answers.each do |answer|
-    .answer
-      p= answer.body
-      - if current_user&.author_of?(answer)
-        = link_to 'Delete Answer', answer, class: 'answer__delete', method: :delete
+  - if question.best_answer
+    = render 'answers/answer', answer: question.best_answer, is_best: true
+  = render question.answers
 
 - if user_signed_in?
+  .answer-errors
   h3= 'Enter your answer:'
-  = form_with model: @new_answer, url: question_answers_path(question.id), class: 'new-answer' do |f|
-    = f.label :body
-    = f.text_area :body
-    = f.submit 'Send Answer'
+  = form_with model: [question, @answer], class: 'new-answer' do |f|
+    p
+      = f.label :body
+      = f.text_area :body
+    p
+      = f.submit 'Send Answer'

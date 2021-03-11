@@ -1,28 +1,28 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, except: [:show]
-  def show; end
-
+  before_action :authenticate_user!
   def create
-    question = Question.find(params[:question_id])
-    @new_answer = current_user.answers.new(answer_params.merge(question_id: question.id))
-    if @new_answer.save
-      redirect_to question, notice: 'Your answer successfully created.'
-    else
-      render "questions/show", locals: { question: question }
-    end
+    @question = Question.find(params[:question_id])
+    @answer = current_user.answers.create(answer_params.merge(question_id: question.id))
   end
 
-  def edit; end
+  def update
+    @answer = Answer.find(params[:id])
+    @answer.update(answer_params)
+    @question = @answer.question
+  end
 
   def destroy
     @answer = Answer.find(params[:id])
-    if current_user.author_of?(@answer)
-      @answer.destroy
-      redirect_to @answer.question, notice: 'Your answer successfully deleted.'
-    end
+    @answer.destroy if current_user.author_of?(@answer)
   end
 
   private
+
+  def question
+    @question
+  end
+
+  helper_method :question
 
   def answer_params
     params.require(:answer).permit(:body)

@@ -1,0 +1,13 @@
+(() => {
+  <% if @answer.persisted? %>
+    const answers = document.querySelector('.answers')
+    const newAnswerNode = document.createElement('div')
+    answers.appendChild(newAnswerNode)
+    newAnswerNode.outerHTML = '<%= j render(@answer) %>'
+    const answerTextarea = document.querySelector('.new-answer #answer_body')
+    answerTextarea.value = ''
+  <% else %>
+    const answerErrors = document.querySelector('.answer-errors')
+    answerErrors.innerHTML = '<%= render 'shared/errors', resource: @answer %>'
+  <% end %>
+})()

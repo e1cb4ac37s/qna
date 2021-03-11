@@ -7,7 +7,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @new_answer = Answer.new
+    @answer = Answer.new
   end
 
   def new; end
@@ -25,17 +25,22 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if question.update(question_params)
-      redirect_to @question
-    else
-      render :edit
-    end
+    question.update(question_params)
   end
 
   def destroy
     if current_user.author_of?(question)
       question.destroy
       redirect_to questions_path, notice: 'Your question successfully deleted.'
+    end
+  end
+
+  def set_best_answer
+    @answer = Answer.find(params[:answer_id])
+    @question = Question.find(params[:id])
+    @prev_best_answer = @question.best_answer
+    if @question.id == @answer.question_id
+      @question.set_best_answer(@answer == @prev_best_answer ? nil : @answer)
     end
   end
 
