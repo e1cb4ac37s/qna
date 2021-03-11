@@ -2,6 +2,7 @@ class Question < ApplicationRecord
   belongs_to :user
   belongs_to :best_answer, class_name: 'Answer', optional: true
   has_many :answers
+  has_one_attached :file
 
   validates :title, :body, presence: true
   validates :title, length: { maximum: 255 }
