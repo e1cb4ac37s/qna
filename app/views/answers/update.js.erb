@@ -1,7 +1,7 @@
 (() => {
   const answerNodes = document.querySelectorAll('#answer-<%= @answer.id %>')
   <% if @answer.errors.present? %>
-    const answerErrors = answerNode.querySelector('.answer#answer-<%= @answer.id %> .answer__errors')
+    const answerErrors = answerNodes[0].querySelector('.answer#answer-<%= @answer.id %> .answer__errors')
     answerErrors.innerHTML = '<%= render 'shared/errors', resource: @answer %>'
   <% else %>
     answerNodes[0].outerHTML = '<%= j render @answer, is_best: @answer.best_answer_of?(question) %>'

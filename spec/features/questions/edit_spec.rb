@@ -8,7 +8,7 @@ feature 'User can create question', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     background do
       sign_in(user)
       visit question_path(question)
@@ -17,7 +17,7 @@ feature 'User can create question', %q{
       end
     end
 
-    scenario 'edits the question title', js: true do
+    scenario 'edits the question title' do
       within '.question' do
         expect(page).to have_selector 'input'
       end
@@ -30,7 +30,7 @@ feature 'User can create question', %q{
       expect(page).to have_content new_title
     end
 
-    scenario 'edits the question body', js: true do
+    scenario 'edits the question body' do
       within '.question' do
         expect(page).to have_selector 'textarea'
 
@@ -42,7 +42,7 @@ feature 'User can create question', %q{
       end
     end
 
-    scenario 'edits the question with errors', js: true do
+    scenario 'edits the question with errors' do
       within '.question' do
         fill_in 'Body', with: ''
         click_on 'Save'

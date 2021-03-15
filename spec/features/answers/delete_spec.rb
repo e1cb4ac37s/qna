@@ -8,13 +8,12 @@ feature 'User can delete answer', %q{
   given(:question) { create(:question, user_id: user.id) }
   given!(:answer) { create(:answer, user_id: user.id, question: question, body: 'answer body') }
 
-  describe 'Authenticated user' do
+  describe 'Authenticated user', js: true do
     scenario 'deletes her answer' do
       sign_in(user)
       visit question_path(question)
       click_on class: 'answer__delete'
 
-      expect(page).to have_content 'Your answer successfully deleted.'
       expect(page).not_to have_content answer.body
     end
 
