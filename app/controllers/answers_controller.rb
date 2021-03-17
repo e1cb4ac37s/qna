@@ -15,11 +15,6 @@ class AnswersController < ApplicationController
     @answer.destroy if current_user.author_of?(@answer)
   end
 
-  def delete_attachment
-    @file = @answer.files.find(params[:file_id])
-    @file.purge
-  end
-
   private
 
   def set_answer
