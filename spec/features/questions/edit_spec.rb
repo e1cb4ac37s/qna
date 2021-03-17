@@ -52,6 +52,18 @@ feature 'User can create question', %q{
       end
     end
 
+    scenario 'removes file from question' do
+      within '.question' do
+        attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
+        click_on 'Save'
+        expect(page).not_to have_link 'rails_helper.rb'
+      end
+      within '.files' do
+        click_on 'Delete'
+      end
+      expect(page).not_to have_link 'rails_helper.rb'
+    end
+
     scenario 'edits the question with errors' do
       within '.question' do
         fill_in 'Body', with: ''

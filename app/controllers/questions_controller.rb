@@ -44,6 +44,11 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def delete_attachment
+    @file = question.files.find(params[:file_id])
+    @file.purge
+  end
+
   private
 
   def question
