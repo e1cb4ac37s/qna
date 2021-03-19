@@ -9,6 +9,13 @@ ruby:
       | [Best Answer]
   p= answer.body
 
+  - if answer.files.attached?
+    .files
+      - answer.files.each do |file|
+        p id="file-#{file.id}"
+          = link_to file.filename.to_s, url_for(file)
+          = link_to 'Delete', attachment_path(file), method: :delete, remote: true
+
   .answer__actions
     - if current_user&.author_of?(answer.question)
       = link_to 'Best!', set_best_answer_question_path(answer.question, answer), class: is_best ? 'strike' : '', method: :patch, remote: true
@@ -20,6 +27,11 @@ ruby:
     .answer__errors
 
     = form_with model: answer, class: 'hidden', html: { id: "answer-edit-form-#{answer.id}" } do |f|
-      = f.label :body, 'Your answer'
-      = f.text_area :body
-      = f.submit 'Save'
+      p
+        = f.label :body, 'Your answer'
+        = f.text_area :body
+      p
+        = f.label :files
+        = f.file_field :files, multiple: true
+      p
+        = f.submit 'Save'

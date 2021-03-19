@@ -11,7 +11,6 @@ feature 'User can delete question', %q{
     scenario 'deletes her question' do
       sign_in(user)
       visit question_path(question)
-      save_and_open_page
       click_on class: 'question__delete'
 
       expect(page).to have_content 'Your question successfully deleted.'

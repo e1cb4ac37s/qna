@@ -8,6 +8,10 @@ RSpec.describe Question, type: :model do
   it { should belong_to :user }
   it { should belong_to(:best_answer).optional }
 
+  it 'has many attached files' do
+    expect(Question.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
+  end
+
   describe '#set_best_answer' do
     let(:user) { create(:user) }
     let(:question) { create(:question, user: user) }
