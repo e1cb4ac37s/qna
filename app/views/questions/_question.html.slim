@@ -9,6 +9,12 @@
           = link_to file.filename.to_s, url_for(file)
           = link_to 'Delete', attachment_path(file), method: :delete, remote: true
 
+  - if question.links.any?
+    .links
+      ul
+        - question.links.each do |link|
+          li= link_to link.name, link.url
+
   - if current_user&.author_of?(question)
     .question__actions
       = link_to 'Edit', '#', class: 'question__edit'
