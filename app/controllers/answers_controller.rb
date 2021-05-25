@@ -1,6 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_answer, only: %i[update destroy delete_attachment]
+
   def create
     @question = Question.find(params[:question_id])
     @answer = current_user.answers.create(answer_params.merge(question_id: question.id))
@@ -28,6 +29,6 @@ class AnswersController < ApplicationController
   helper_method :question
 
   def answer_params
-    params.require(:answer).permit(:body, files: [])
+    params.require(:answer).permit(:body, files: [], links_attributes: [:name, :url])
   end
 end

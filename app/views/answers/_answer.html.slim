@@ -16,6 +16,12 @@ ruby:
           = link_to file.filename.to_s, url_for(file)
           = link_to 'Delete', attachment_path(file), method: :delete, remote: true
 
+  - if answer.links.any?
+    .links
+      ul
+        - answer.links.each do |link|
+          li= link_to link.name, link.url
+
   .answer__actions
     - if current_user&.author_of?(answer.question)
       = link_to 'Best!', set_best_answer_question_path(answer.question, answer), class: is_best ? 'strike' : '', method: :patch, remote: true
@@ -26,7 +32,7 @@ ruby:
 
     .answer__errors
 
-    = form_with model: answer, class: 'hidden', html: { id: "answer-edit-form-#{answer.id}" } do |f|
+    = form_with model: answer, class: 'answer-form hidden', html: { id: "answer-edit-form-#{answer.id}" } do |f|
       p
         = f.label :body, 'Your answer'
         = f.text_area :body
