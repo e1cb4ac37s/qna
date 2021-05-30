@@ -1,0 +1,11 @@
+(() => {
+  <% if @link.destroyed? %>
+    const link = document.querySelector('#link-<%= @link.id %>')
+    const linksList = document.querySelector('#link-<%= @link.id %>').parentElement
+    console.log(link)
+    console.log(linksList)
+    linksList.children.length === 1 // destroyed link was the only link, remove whole links block
+      ? linksList.closest('.links').remove()
+      : link.remove()
+  <% end %>
+})()

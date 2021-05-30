@@ -1,7 +1,8 @@
 p= link_to 'Ask question', new_question_path
 
-ul.questions
+ul.questions.list-group
   - @questions.each do |question|
-    li.question
-      h4 = question.title
-      p = question.body
+    li.question.list-group-item
+      = link_to question do
+        h4= question.title
+      p= question.body

@@ -1,0 +1,6 @@
+.row.mb-3
+  h5.card-title Links:
+  .links-form#links
+    = f.fields_for :links do |l|
+      = render 'shared/links/link_fields', f: l
+    = link_to_add_association 'Add Link', f, :links, partial: 'shared/links/link_fields', class: 'btn btn-success btn-sm'

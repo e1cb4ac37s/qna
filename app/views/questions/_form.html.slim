@@ -1,23 +1,22 @@
 = render 'shared/errors', resource: question
 
 = form_with model: question, class: edit ? 'hidden' : '', html: { id: 'question-edit-form' }, remote: true do |f|
-  p
-    = f.label :title
-    = f.text_field :title
-  p
-    = f.label :body
-    = f.text_area :body
-  p
-    = f.label :files
-    = f.file_field :files, multiple: true
-  p Links:
-  p
-    = f.fields_for :links do |l|
-      p
-        = l.label :name, 'Link name'
-        = l.text_field :name
-      p
-        = l.label :url
-        = l.text_field :url
-  p
-    = f.submit edit ? 'Save' : 'Ask'
+  .card.mb-5.shadow
+    .card-body
+      h1.card-title Ask your question
+      .row.mb-3
+        = f.label :title, class: 'col-sm-2 col-form-label'
+        .col-sm-10
+          = f.text_field :title, class: 'form-control form-control-sm'
+      .row.mb-3
+        = f.label :body, class: 'col-sm-2 col-form-label'
+        .col-sm-10
+          = f.text_area :body, class: 'form-control form-control-sm', rows: '5'
+      .row.mb-3
+        = f.label :files, class: 'col-sm-2 col-form-label'
+        .col-sm-10
+          = f.file_field :files, multiple: true, class: 'form-control form-control-sm'
+      hr
+      = render 'shared/links/links_form', f: f
+      .d-grid
+        = f.submit edit ? 'Save' : 'Ask', class: 'btn btn-outline-success'

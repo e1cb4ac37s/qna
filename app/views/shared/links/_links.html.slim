@@ -1,0 +1,6 @@
+- if linkable.links.any?
+  .links.mb-2
+    h6 Links
+    ul.list-group
+      - linkable.links.each do |link|
+        = render 'shared/links/link', link: link, linkable: linkable

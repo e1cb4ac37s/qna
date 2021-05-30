@@ -1,28 +1,26 @@
 .question-wrapper
   = render question
 
-.answers
+.answers.ms-5
   - if question.best_answer
     = render 'answers/answer', answer: question.best_answer, is_best: true
   = render question.answers
 
 - if user_signed_in?
   .answer-errors
-  h3= 'Enter your answer:'
   = form_with model: [question, @answer], class: 'answer-form new-answer' do |f|
-    p
-      = f.label :body
-      = f.text_area :body
-    p
-      = f.label :files
-      = f.file_field :files, multiple: true
-    p Links:
-    = f.fields_for :links do |l|
-      p
-        = l.label :name, 'Link name'
-        = l.text_field :name
-      p
-        = l.label :url
-        = l.text_field :url
-    p
-      = f.submit 'Send Answer'
+    .card.mb-5.shadow
+      .card-body
+        h5.card-title Enter your answer:
+        .row.mb-3
+          = f.label :body, class: 'col-sm-2 col-form-label'
+          .col-sm-10
+            = f.text_area :body, class: 'form-control form-control-sm', rows: '3'
+        .row.mb-3
+          = f.label :files, class: 'col-sm-2 col-form-label'
+          .col-sm-10
+            = f.file_field :files, multiple: true, class: 'form-control form-control-sm'
+        hr
+        = render 'shared/links/links_form', f: f
+        .d-grid
+          = f.submit 'Send Answer', class: 'btn btn-success'

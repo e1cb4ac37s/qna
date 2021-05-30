@@ -1,23 +1,22 @@
-.question
-  h1= question.title
-  p= question.body
+.question.card.mb-3.shadow
+  .card-body
+    h1.card-title= question.title
+    p.card-text= question.body
+    hr
 
-  - if question.files.attached?
-    .files
-      - question.files.each do |file|
-        p id="file-#{file.id}"
-          = link_to file.filename.to_s, url_for(file)
-          = link_to 'Delete', attachment_path(file), method: :delete, remote: true
+    - if question.files.attached?
+      .files
+        - question.files.each do |file|
+          p id="file-#{file.id}"
+            = link_to file.filename.to_s, url_for(file)
+            = link_to 'Delete', attachment_path(file), method: :delete, remote: true
 
-  - if question.links.any?
-    .links
-      ul
-        - question.links.each do |link|
-          li= link_to link.name, link.url
+    = render 'shared/links/links', linkable: question
 
-  - if current_user&.author_of?(question)
-    .question__actions
-      = link_to 'Edit', '#', class: 'question__edit'
-      = link_to 'Delete', question, class: 'question__delete', method: :delete
-    .question-errors
-    = render 'form', question: question, edit: true
+    - if current_user&.author_of?(question)
+      .d-flex.flex-row-reverse
+        .question__actions.btn-group role="group"
+          = link_to 'Edit', '#', class: 'btn btn-sm btn-warning  question__edit'
+          = link_to 'Delete', question, class: 'btn btn-sm btn-danger  question__delete', method: :delete
+      .question-errors
+      = render 'form', question: question, edit: true

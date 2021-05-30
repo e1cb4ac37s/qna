@@ -4,8 +4,17 @@
     const newAnswerNode = document.createElement('div')
     answers.appendChild(newAnswerNode)
     newAnswerNode.outerHTML = '<%= j render(@answer) %>'
+
+    // clear textarea
     const answerTextarea = document.querySelector('.new-answer #answer_body')
     answerTextarea.value = ''
+
+    // clear link fields
+    document.querySelectorAll('.new-answer .link-fields').forEach(node => node.remove())
+
+    // gist rendering
+    document.dispatchEvent(new CustomEvent(':render-new-gist'))
+
   <% else %>
     const answerErrors = document.querySelector('.answer-errors')
     answerErrors.innerHTML = '<%= render 'shared/errors', resource: @answer %>'
