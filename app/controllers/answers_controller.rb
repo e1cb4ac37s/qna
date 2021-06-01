@@ -1,4 +1,6 @@
 class AnswersController < ApplicationController
+  include DestroyLinks
+
   before_action :authenticate_user!
   before_action :set_answer, only: %i[update destroy delete_attachment]
 
@@ -9,6 +11,9 @@ class AnswersController < ApplicationController
 
   def update
     @answer.update(answer_params)
+
+    destroy_links(answer_params, @answer)
+
     @question = @answer.question
   end
 

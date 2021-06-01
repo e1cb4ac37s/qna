@@ -1,4 +1,6 @@
 class QuestionsController < ApplicationController
+  include DestroyLinks
+
   before_action :authenticate_user!, except: [:index, :show]
   before_action :question, only: :new
   helper_method :question
@@ -27,6 +29,7 @@ class QuestionsController < ApplicationController
 
   def update
     question.update(question_params)
+    destroy_links(question_params, @question)
   end
 
   def destroy
